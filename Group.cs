@@ -9,11 +9,11 @@ namespace StudentHW
 {
     internal class Group
     {
-        private string m_nameGroup;
-        private string m_specialGroup;
-        private int m_numberGroup;
-        private List<Student> m_students = new List<Student>();
-
+        private string m_nameGroup { get; set; }
+        private string m_specialGroup { get; set; }
+        private int m_numberGroup { get; set; }
+        private List<Person> m_students = new List<Person>();
+        public Person this[int index] => m_students[index];
         public Group(string name, string spec, int n)
         {          
             m_nameGroup = name;
@@ -21,17 +21,24 @@ namespace StudentHW
             m_numberGroup = n;
             Console.WriteLine("Created Group");
         }
-        public Group(List<Student> arr)
+        public Group(List<Person> arr)
         {
             m_students = arr;
         }
         public void AddGroupStudent(Student st)
         {
-            if(st == null)
+            try
             {
-                Console.WriteLine("NULL");
+                if (st == null)
+                {
+                    throw new Exception("Переданный студент не имеет адреса");
+                }
+                m_students.Add(st);
             }
-            m_students.Add(st);
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error {e.Message}");
+            }
         }
         public void AddRandomStudent(int size)
         {
@@ -41,13 +48,21 @@ namespace StudentHW
                 m_students.Add(new Student(GetRandomWords(8), GetRandomWords(9), GetRandomWords(5), address, DateTime.Now));
             }
         }
-        public Student MoveToGroup(int m)
+        public Person MoveToGroup(int m)
         {
-            if(m > 0 || m < m_students.Count)
+            try
             {
-                Student temp = m_students[m];
+                if (m < 0 || m > m_students.Count)
+                {
+                    throw new Exception("Индекс выходит за диапазон");
+                }
+                Person temp = m_students[m];
                 m_students.Remove(m_students[m]);
                 return temp;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error {e.Message}");
             }
             return null;
         }
@@ -66,7 +81,7 @@ namespace StudentHW
                 if(sum < 7)
                 {
                     m_students[j].ShowInfo();
-                    Console.WriteLine("_____________________Expulsion____________________");
+                    Console.WriteLine("\n_____________________Expulsion____________________");
                     m_students.RemoveAt(j);
                 }
             }
@@ -93,91 +108,79 @@ namespace StudentHW
             if(id != -1)
             {
                 m_students[id].ShowInfo();
-                Console.WriteLine("_____________________Expulsion____________________");
+                Console.WriteLine("\n_____________________Expulsion____________________");
                 m_students.RemoveAt(id);
             }
             
         }
         public void ShowGroupStudent()
         {
-            if(m_students[0] == null)
+            try
             {
-                Console.WriteLine("None arr Student");
-                return;
-            }
-            int temp = 0;
-            ConsoleKey pressed;
-            do
-            {
-                Console.WriteLine($"Name Group: {m_nameGroup}\t\tSpec: {m_specialGroup}\nNumber Group: {m_numberGroup}");
-                Console.WriteLine("\t\t\tStudent #{0}", temp + 1);
-                m_students[temp].ShowInfo();
-                pressed = Console.ReadKey(true).Key;
-                if (pressed == ConsoleKey.D && temp + 1 < m_students.Count)
+                int temp = 0;
+                if (m_students.Count == 0)
                 {
-                    temp++;
+                    throw new Exception("Лист студентов пуст");
                 }
-                if(pressed == ConsoleKey.A && temp != 0)
+
+                ConsoleKey pressed;
+                do
                 {
-                    temp--;
-                }
-                if(pressed == ConsoleKey.X)
-                {
-                    Console.WriteLine("Redaction: \n1)Name Group\n2)Spec Group\n3)Number Group\n4)First Name\n5)Last Name\n6)Sur Name\n7)Birth Date\n8)Phone Number");
-                    int input = Convert.ToInt32(Console.ReadLine());
-                    input--;
-                    switch(input)
+                    Console.WriteLine($"Name Group: {m_nameGroup}\t\tSpec: {m_specialGroup}\nNumber Group: {m_numberGroup}");
+                    Console.WriteLine("\t\t\tStudent #{0}", temp + 1);
+                    Console.WriteLine("Count {0}", m_students.Count);
+                    m_students[temp].ShowInfo();
+                    pressed = Console.ReadKey(true).Key;
+                    if (pressed == ConsoleKey.D && temp + 1 < m_students.Count) //Переход по массиву студентов(вправо) -> D
                     {
-                        case 0:
-                            {
-                                m_nameGroup = Convert.ToString(Console.ReadLine());
-                                break;
-                            }
-                        case 1:
-                            {
-                                m_specialGroup = Convert.ToString(Console.ReadLine());
-                                break;
-                            }
-                        case 2:
-                            {
-                                m_numberGroup = Convert.ToInt32(Console.ReadLine());
-                                break;
-                            }
-                        case 3:
-                            {
-                                m_students[temp].SetFirstName(Console.ReadLine());
-                                break;
-                            }
-                        case 4:
-                            {
-                                m_students[temp].SetLastName(Console.ReadLine());
-                                break;
-                            }
-                        case 5:
-                            {
-                                m_students[temp].SetSurName(Console.ReadLine());
-                                break;
-                            }
-                        case 6:
-                            {
-                                m_students[temp].SetBirthDate(Convert.ToDateTime(Console.ReadLine()));
-                                break;
-                            }
-                        case 7:
-                            {
-                                m_students[temp].SetPhoneNumber(Convert.ToString(Console.ReadLine()));
-                                break;
-                            }
-                        default:
-                            {
-                                Console.WriteLine("Exit or Range error");
-                                break;
-                            }
+                        temp++;
                     }
-                }
-                Console.Clear();
-            } while (pressed != ConsoleKey.W);
-            
+                    if (pressed == ConsoleKey.A && temp != 0) //Переход по массиву студентов(влево) -> A
+                    {
+                        temp--;
+                    }
+                    if (pressed == ConsoleKey.X) //Изменить показаного студента(изменение) -> X
+                    {
+                        Console.WriteLine("Redaction: \n1)Name Group\n2)Spec Group\n3)Number Group\n4)Change Student");
+                        int input = Convert.ToInt32(Console.ReadLine());
+                        input--;
+                        Console.WriteLine("Input Data");
+                        switch (input)
+                        {
+                            case 0:
+                                {
+                                    m_nameGroup = Convert.ToString(Console.ReadLine());
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    m_specialGroup = Convert.ToString(Console.ReadLine());
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    m_numberGroup = Convert.ToInt32(Console.ReadLine());
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    m_students[temp].SetAllInfoStudent();
+                                    break;
+                                }
+                            default:
+                                {
+                                    Console.WriteLine("Exit or Range error");
+                                    break;
+                                }
+                        }
+                    }
+                    Console.Clear();
+                } while (pressed != ConsoleKey.W); //Выход -> W
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error {e.Message}");
+            }
         }
         public string GetRandomWords(uint length)
         {
