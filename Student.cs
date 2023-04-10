@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StudentHW
 {
-    internal class Student : Person
+    internal class Student : Person, IComparer<Student>
     {
         public Student(string firstName, string lastName, string surName) : this(firstName, lastName, surName, new Address(), new DateTime()) 
         {
@@ -160,6 +160,17 @@ namespace StudentHW
                         break;
                     }
             }
+        }
+
+        public int Compare(Student x, Student y)
+        {
+            if(x == null || y == null)
+            {
+                return 0;
+            }
+            return string.CompareOrdinal(x.m_firstName.ToLower(), y.m_firstName.ToLower());
+            
+
         }
     }
 

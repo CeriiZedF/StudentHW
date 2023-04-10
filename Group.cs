@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StudentHW
 {
-    internal class Group
+    internal class Group : IEnumerable
     {
         private string m_nameGroup { get; set; }
         private string m_specialGroup { get; set; }
@@ -195,6 +196,10 @@ namespace StudentHW
 
             return temp;
         }
-        
+
+        public IEnumerator GetEnumerator()
+        {
+            return new StudentEnumarator(m_students);
+        }
     }
 }
