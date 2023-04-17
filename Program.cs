@@ -10,6 +10,25 @@ namespace StudentHW
 {
     internal class Program
     {
+        public delegate bool Comparer(object obj1, object obj2);
+        internal static class Sorter
+        {
+            static public void Sort(object[] array, Comparer del)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    for (int j = i + 1; j < array.Length; j++)
+                    {
+                        if (del(array[j], array[i]))
+                        {
+                            object temporary = array[i];
+                            array[i] = array[j];
+                            array[j] = temporary;
+                        }
+                    }
+                }
+            }
+        }
         static void Main()
         {
             Address address = new Address("dsasd", "ds212323", "dsad21", "daswqwe");
@@ -81,23 +100,74 @@ namespace StudentHW
 
             #region HomeWork 14.04.2023
 
-            Group group2 = new Group("E64", "IT", 1);
-            group2.AddRandomStudent(10);
+            //Group group2 = new Group("E64", "IT", 1);
+            //group2.AddRandomStudent(10);
 
-            foreach (Person person in group2)
+            //foreach (Person person in group2)
+            //{
+            //    person.ShowInfo();
+            //    Console.WriteLine("------------------------------------------------------\n");
+            //}
+            //Console.WriteLine("\n\n\n\nFor enumerator 2\n");
+
+            //for(IEnumerator temp = group2.GetEnumerator(); temp.MoveNext(); )
+            //{
+            //    object item = temp.Current;
+
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region delegate
+
+            Student[] arr =
             {
-                person.ShowInfo();
-                Console.WriteLine("------------------------------------------------------\n");
-            }
-            Console.WriteLine("\n\n\n\nFor enumerator 2\n");
+                new Student("1", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("2", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("3", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("4", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("5", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("6", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("7", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("8", "dasd", "asdasd", address, bd, "240250235"),
+                new Student("9", "dasd", "asdasd", address, bd, "240250235")
+            };
+            //foreach (Student student in arr)
+            //{
+            //    Console.WriteLine(student);
+            //    student.ShowAllScoresList();
+            //}
 
-            for(IEnumerator temp = group2.GetEnumerator(); temp.MoveNext(); )
+            for(int i = 0; i < arr.Length; i++)
             {
-                object item = temp.Current;
-
-                Console.WriteLine(item);
+                Console.WriteLine($"{i+1}  -  {arr[i].GetHomeWorkScores()}");
             }
 
+            Console.WriteLine("__________________________________________________________\n\n\n\n");
+            Sorter.Sort(arr, delegate (object o1, object o2)
+            {
+            Person left = o1 as Person;
+            Person right = o2 as Person;
+
+            if (left == null || right == null)
+            {
+                throw new Exception("Вибачте, але вам би слід порівняти двох Персон, а не оце все: "
+                    + o1.GetType() + " та " + o2.GetType());
+            }
+                return left.CompareTo(right) > 0;
+            }); // сортируем по именам
+
+
+            //foreach (Student student in arr)
+            //{
+            //    Console.WriteLine(student);
+            //    student.ShowAllScoresList();
+            //}
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}  -  {arr[i].GetHomeWorkScores()}");
+            }
             #endregion
         }
     }

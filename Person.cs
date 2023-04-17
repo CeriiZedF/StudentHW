@@ -76,11 +76,9 @@ namespace StudentHW
                 {
                     sum += m_homeWork[i];
                     sum1 += person.m_homeWork[i];
-                    //Console.WriteLine("Value1 - {0} : Value2 - {1}", m_exams[i], person.m_exams[i]);
                 }
                 sum = sum / m_homeWork.Count;
                 sum1 = sum1 / m_homeWork.Count;
-                Console.WriteLine("1 - {0} : 2 - {1}", sum, sum1);
 
                 if (sum > sum1) { return 1; }
                 else if (sum < sum1) { return -1; }

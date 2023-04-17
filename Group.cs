@@ -13,7 +13,7 @@ namespace StudentHW
         private string m_nameGroup { get; set; }
         private string m_specialGroup { get; set; }
         private int m_numberGroup { get; set; }
-        private List<Person> m_students = new List<Person>();
+        public List<Person> m_students = new List<Person>();
         public Person this[int index] => m_students[index];
         public Group(string name, string spec, int n)
         {          

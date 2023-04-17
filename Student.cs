@@ -67,6 +67,7 @@ namespace StudentHW
         public override string ToString()
         {
             return $"First Name: {m_firstName}\t\tBirth Date: {m_birthDate.ToString("MM / dd / yyyy")}\nLast Name: {m_lastName}\t\tPhoneNumber: {m_phoneNumber}\nSur Name: {m_surName}\n{m_address}";
+            
         }
         public void ShowAllScoresList()
         {
@@ -112,7 +113,8 @@ namespace StudentHW
                 int temp;
                 Random rand = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
                 Thread.Sleep(2);
-                temp = rand.Next(6, (int)max);
+                
+                temp = rand.Next(2, (int)max);
                 return temp;
             }
             catch (Exception e)
@@ -171,6 +173,16 @@ namespace StudentHW
             return string.CompareOrdinal(x.m_firstName.ToLower(), y.m_firstName.ToLower());
             
 
+        }
+        public int GetHomeWorkScores()
+        {
+            int temp = 0;
+            for(int i = 0; i < m_homeWork.Count; i++)
+            {
+                temp += m_homeWork[i];
+            }
+            temp = temp / m_homeWork.Count;
+            return temp;
         }
     }
 
